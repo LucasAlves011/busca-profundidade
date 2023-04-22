@@ -10,29 +10,27 @@ import java.util.*;
 
 public class HelloApplication extends Application {
 
-    public static No objetivo=new No(null, new int[][]{{1, 2, 3},
+    public static No objetivo = new No(null, new int[][]{{1, 2, 3},
             {4, 5, 6},
             {7, 8, 0}});
 
-    public static No inicial=new No(null, new int[][]{{8, 7, 6},
+    public static No inicial = new No(null, new int[][]{{8, 7, 6},
             {5, 4, 3},
             {2, 1, 0}});
 
     public static List<No> resultado;
 
-    public static int expandidos=0;
-
-    public static StringBuilder sb=new StringBuilder();
+    public static int expandidos = 0;
 
     public static void main(String[] args) {
-        boolean paridade=paridade(inicial.estado);
-        int max_Profundidade=10;
+        boolean paridade = paridade(inicial.estado);
+        int max_Profundidade = 10;
 
         if (paridade) {
 
             while (resultado == null) {
-                resultado=buscaEmProfundidade(inicial, objetivo, max_Profundidade);
-                max_Profundidade+=5;
+                resultado = buscaEmProfundidade(inicial, objetivo, max_Profundidade);
+                max_Profundidade += 5;
             }
 
             launch();
@@ -43,19 +41,19 @@ public class HelloApplication extends Application {
     }
 
     public static boolean paridade(int[][] estado) {
-        int tamanho=estado.length * estado.length;
-        int[] vetor=new int[tamanho];
+        int tamanho = estado.length * estado.length;
+        int[] vetor = new int[tamanho];
 
         // Transforma a matriz em um vetor
-        for (int i=0; i < estado.length; i++) {
-            for (int j=0; j < estado.length; j++) {
-                vetor[i * estado.length + j]=estado[i][j];
+        for (int i = 0; i < estado.length; i++) {
+            for (int j = 0; j < estado.length; j++) {
+                vetor[i * estado.length + j] = estado[i][j];
             }
         }
 
-        int inversoes=0;
-        for (int i=0; i < tamanho - 1; i++) {
-            for (int j=i + 1; j < tamanho; j++) {
+        int inversoes = 0;
+        for (int i = 0; i < tamanho - 1; i++) {
+            for (int j = i + 1; j < tamanho; j++) {
                 if (vetor[i] != 0 && vetor[j] != 0 && vetor[i] > vetor[j]) {
                     inversoes++;
                 }
@@ -65,14 +63,14 @@ public class HelloApplication extends Application {
     }
 
     public static List<No> buscaEmProfundidade(No noInicial, No noObjetivo, int maxProfundidade) {
-        Stack<No> pilha=new Stack<>();
-        Set<No> explorados=new HashSet<>();
-        expandidos=0;
+        Stack<No> pilha = new Stack<>();
+        Set<No> explorados = new HashSet<>();
+        expandidos = 0;
 
         pilha.push(noInicial);
 
         while (!pilha.isEmpty()) {
-            No noAtual=pilha.pop();
+            No noAtual = pilha.pop();
             System.out.println("Tamanho da pilha: " + pilha.size() + " ---- Explorados " + explorados.size() + " ---- Profundidade: " + noAtual.profundidade + " ---- Estado: " + Arrays.deepToString(noAtual.estado));
 
             explorados.add(noAtual);
@@ -82,9 +80,9 @@ public class HelloApplication extends Application {
             }
 
             if (noAtual.profundidade < maxProfundidade) {
-                List<String> acoes=possiveisAcoes(noAtual.estado);
+                List<String> acoes = possiveisAcoes(noAtual.estado);
                 for (String acao : acoes) {
-                    No filho=new No(noAtual, swap(noAtual.estado, acao));
+                    No filho = new No(noAtual, swap(noAtual.estado, acao));
                     if (!explorados.contains(filho) && !pilha.contains(filho)) {
                         pilha.push(filho);
                         expandidos++;
@@ -99,8 +97,8 @@ public class HelloApplication extends Application {
     }
 
     public static List<String> possiveisAcoes(int[][] estado) {
-        List<String> acoes=new ArrayList<>();
-        int[] posicaoZero=procurarZero(estado);
+        List<String> acoes = new ArrayList<>();
+        int[] posicaoZero = procurarZero(estado);
 
         if (posicaoZero[1] > 0)
             acoes.add("esquerda");
@@ -115,41 +113,41 @@ public class HelloApplication extends Application {
     }
 
     public static int[][] swap(int[][] estado, String acao) {
-        int[] posicaoZero=procurarZero(estado);
+        int[] posicaoZero = procurarZero(estado);
 
-        int[][] novoEstado=new int[3][3];
+        int[][] novoEstado = new int[3][3];
 
-        for (int i=0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             System.arraycopy(estado[i], 0, novoEstado[i], 0, 3);
         }
 
         switch (acao) {
             case "cima" -> {
-                novoEstado[posicaoZero[0]][posicaoZero[1]]=novoEstado[posicaoZero[0] - 1][posicaoZero[1]];
-                novoEstado[posicaoZero[0] - 1][posicaoZero[1]]=0;
+                novoEstado[posicaoZero[0]][posicaoZero[1]] = novoEstado[posicaoZero[0] - 1][posicaoZero[1]];
+                novoEstado[posicaoZero[0] - 1][posicaoZero[1]] = 0;
             }
             case "baixo" -> {
-                novoEstado[posicaoZero[0]][posicaoZero[1]]=novoEstado[posicaoZero[0] + 1][posicaoZero[1]];
-                novoEstado[posicaoZero[0] + 1][posicaoZero[1]]=0;
+                novoEstado[posicaoZero[0]][posicaoZero[1]] = novoEstado[posicaoZero[0] + 1][posicaoZero[1]];
+                novoEstado[posicaoZero[0] + 1][posicaoZero[1]] = 0;
             }
             case "esquerda" -> {
-                novoEstado[posicaoZero[0]][posicaoZero[1]]=novoEstado[posicaoZero[0]][posicaoZero[1] - 1];
-                novoEstado[posicaoZero[0]][posicaoZero[1] - 1]=0;
+                novoEstado[posicaoZero[0]][posicaoZero[1]] = novoEstado[posicaoZero[0]][posicaoZero[1] - 1];
+                novoEstado[posicaoZero[0]][posicaoZero[1] - 1] = 0;
             }
             case "direita" -> {
-                novoEstado[posicaoZero[0]][posicaoZero[1]]=novoEstado[posicaoZero[0]][posicaoZero[1] + 1];
-                novoEstado[posicaoZero[0]][posicaoZero[1] + 1]=0;
+                novoEstado[posicaoZero[0]][posicaoZero[1]] = novoEstado[posicaoZero[0]][posicaoZero[1] + 1];
+                novoEstado[posicaoZero[0]][posicaoZero[1] + 1] = 0;
             }
         }
         return novoEstado;
     }
 
     public static List<No> getCaminho(No no) {
-        List<No> caminho=new ArrayList<>();
-        No noAtual=no;
+        List<No> caminho = new ArrayList<>();
+        No noAtual = no;
         while (noAtual != null) {
             caminho.add(noAtual);
-            noAtual=noAtual.pai;
+            noAtual = noAtual.pai;
         }
         Collections.reverse(caminho);
         System.out.println("\u001B[42m \u001B[30m" + "Encontrei o objetivo!" + "\u001B[0m");
@@ -158,12 +156,12 @@ public class HelloApplication extends Application {
     }
 
     public static int[] procurarZero(int[][] estado) {
-        int[] posicaoZero=new int[2];
+        int[] posicaoZero = new int[2];
 
-        for (int i=0; i < 3; i++) {
-            for (int j=0; j < 3; j++) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
                 if (estado[i][j] == 0)
-                    posicaoZero=new int[]{i, j};
+                    posicaoZero = new int[]{i, j};
             }
         }
         return posicaoZero;
@@ -175,12 +173,12 @@ public class HelloApplication extends Application {
         public int profundidade;
 
         public No(No pai, int[][] estado) {
-            this.pai=pai;
-            this.estado=estado;
+            this.pai = pai;
+            this.estado = estado;
             if (pai == null)
-                this.profundidade=0;
+                this.profundidade = 0;
             else
-                this.profundidade=pai.profundidade + 1;
+                this.profundidade = pai.profundidade + 1;
         }
 
         @Override
@@ -188,7 +186,7 @@ public class HelloApplication extends Application {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
 
-            No no=(No) o;
+            No no = (No) o;
 
             return Arrays.deepEquals(estado, no.estado);
         }
@@ -201,8 +199,8 @@ public class HelloApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader=new FXMLLoader(HelloApplication.class.getResource("busca.fxml"));
-        Scene scene=new Scene(fxmlLoader.load());
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("busca.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Busca em Profundidade! - By: Lucas Alves e Matheus Florentino");
         stage.setScene(scene);
         stage.show();
